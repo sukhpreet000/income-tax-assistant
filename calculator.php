@@ -1,0 +1,248 @@
+<?php
+// calculator.php
+require_once __DIR__ . '/includes/auth_check.php';
+requireAuthPage();
+
+$pageTitle = "Interactive Income Tax Calculator";
+$topbarTitle = "Tax Calculator & Regime Comparator";
+$activePage = "calculator";
+
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/includes/sidebar.php';
+?>
+
+<div class="main-wrapper">
+  <?php require_once __DIR__ . '/includes/topbar.php'; ?>
+
+  <main class="content-body">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div>
+        <h2 class="page-title">Income Tax Calculator</h2>
+        <p class="page-subtitle">Configure income parameters, select your assessment year, and analyze Old vs New Tax Regimes.</p>
+      </div>
+      <div class="page-actions">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="printTaxStatement()">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+          Print Computation
+        </button>
+        <button type="button" class="btn btn-success btn-sm" id="save-calc-btn" onclick="saveCalculationToHistory()">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
+          Save to History
+        </button>
+      </div>
+    </div>
+
+    <!-- Recommendation Box -->
+    <div id="calc-recommendation-box" class="disclaimer-banner" style="background: var(--primary-light); border-color: var(--primary-border); color: var(--primary);">
+      Calculating optimal tax regime comparison...
+    </div>
+
+    <!-- Calculator Configuration Controls -->
+    <div class="card" style="margin-bottom: 2rem;">
+      <div class="card-header">
+        <h3 class="card-title">Taxpayer Parameters & Inputs</h3>
+        <button type="button" class="btn btn-outline-primary btn-sm" onclick="prefillFromUserData()">
+          Auto-fill From My Records
+        </button>
+      </div>
+      <div class="card-body">
+        <div class="grid grid-cols-3" style="gap: 1.25rem;">
+          <div class="form-group">
+            <label class="form-label" for="calc-fy">Financial Year</label>
+            <select id="calc-fy" class="form-select" onchange="computeTaxComparison()">
+              <option value="2024-2025" selected>FY 2024-25 (AY 2025-26) - Revised Slabs</option>
+              <option value="2023-2024">FY 2023-24 (AY 2024-25)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="calc-age-group">Taxpayer Category (Age)</label>
+            <select id="calc-age-group" class="form-select" onchange="computeTaxComparison()">
+              <option value="general" selected>Individual (&lt; 60 years)</option>
+              <option value="senior">Senior Citizen (60 - 79 years)</option>
+              <option value="super_senior">Super Senior Citizen (80+ years)</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="display: flex; flex-direction: column; justify-content: flex-end;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; font-size: 0.875rem; cursor: pointer; padding-bottom: 0.65rem;">
+              <input type="checkbox" id="calc-is-salaried" checked onchange="computeTaxComparison()">
+              Salaried Employee (Eligible for Standard Deduction)
+            </label>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2" style="gap: 1.25rem; margin-top: 0.5rem;">
+          <div class="form-group">
+            <label class="form-label" for="calc-gross-income">Gross Total Income (₹) <span class="required">*</span></label>
+            <div class="input-group">
+              <span class="input-prefix">₹</span>
+              <input type="number" id="calc-gross-income" class="form-control" value="1200000" min="0" step="10000" oninput="computeTaxComparison()">
+            </div>
+            <span class="form-text">Salary + Rental + Capital Gains + Business + Other Income</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="calc-deductions">Chapter VI-A Deductions (₹)</label>
+            <div class="input-group">
+              <span class="input-prefix">₹</span>
+              <input type="number" id="calc-deductions" class="form-control" value="200000" min="0" step="5000" oninput="computeTaxComparison()">
+            </div>
+            <span class="form-text">80C (max 1.5L) + 80D + 80CCD (50k) + Sec 24b (Home Loan Int.)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Side by Side Comparison Display -->
+    <div class="grid grid-cols-2" style="margin-bottom: 2rem;">
+      <!-- New Regime Output -->
+      <div class="regime-card" id="calc-new-card">
+        <span class="regime-card-badge" id="calc-new-badge" style="display: none;">Recommended</span>
+        <div class="regime-title">New Tax Regime</div>
+        <p class="regime-description">Streamlined slabs, higher standard deduction, and zero tax up to ₹7,00,000 via Section 87A rebate.</p>
+        <div class="regime-tax-total text-success" id="res-new-net-tax">₹0</div>
+
+        <ul class="regime-details-list">
+          <li class="regime-details-item">
+            <span>Gross Total Income:</span>
+            <span class="font-semibold" id="res-new-gross">₹0</span>
+          </li>
+          <li class="regime-details-item">
+            <span>Less: Standard Deduction:</span>
+            <span class="text-success font-semibold" id="res-new-std-ded">₹0</span>
+          </li>
+          <li class="regime-details-item">
+            <span>Less: Chapter VI-A Deductions:</span>
+            <span class="text-muted" id="res-new-chap6">NIL</span>
+          </li>
+          <li class="regime-details-item strong">
+            <span>Net Taxable Income:</span>
+            <span id="res-new-taxable">₹0</span>
+          </li>
+          <li class="regime-details-item">
+            <span>Base Income Tax:</span>
+            <span id="res-new-base-tax">₹0</span>
+          </li>
+          <li class="regime-details-item">
+            <span>Less: Rebate u/s 87A:</span>
+            <span class="text-success font-semibold" id="res-new-rebate">₹0</span>
+          </li>
+          <li class="regime-details-item">
+            <span>Surcharge (if applicable):</span>
+            <span id="res-new-surcharge">₹0</span>
+          </li>
+          <li class="regime-details-item">
+            <span>Health & Education Cess (4%):</span>
+            <span id="res-new-cess">₹0</span>
+          </li>
+          <li class="regime-details-item strong" style="font-size: 1.1rem;">
+            <span>Total Tax Payable:</span>
+            <span class="text-success font-bold" id="res-new-total-bottom"></span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Old Regime Output -->
+      <div class="regime-card" id="calc-old-card">
+        <span class="regime-card-badge" id="calc-old-badge" style="display: none;">Recommended</span>
+        <div class="regime-title">Old Tax Regime</div>
+        <p class="regime-description">Traditional tax structure allowing 80C, 80D, 80CCD, Home loan interest, and HRA exemptions.</p>
+        <div class="regime-tax-total text-primary" id="res-old-net-tax">₹0</div>
+
+        <ul class="regime-details-list">
+          <li class="regime-details-item">
+            <span>Gross Total Income:</span>
+            <span class="font-semibold" id="res-old-gross">₹0</span>
+          </li>
+          <li class="regime-details-item">
+            <span>Less: Standard Deduction:</span>
+            <span class="text-success font-semibold" id="res-old-std-ded">₹0</span>
+          </li>
+          <li class="regime-details-item">
+            <span>Less: Chapter VI-A Deductions:</span>
+            <span class="text-success font-semibold" id="res-old-chap6">₹0</span>
+          </li>
+          <li class="regime-details-item strong">
+            <span>Net Taxable Income:</span>
+            <span id="res-old-taxable">₹0</span>
+          </li>
+          <li class="regime-details-item">
+            <span>Base Income Tax:</span>
+            <span id="res-old-base-tax">₹0</span>
+          </li>
+          <li class="regime-details-item">
+            <span>Less: Rebate u/s 87A (up to 5L):</span>
+            <span class="text-success font-semibold" id="res-old-rebate">₹0</span>
+          </li>
+          <li class="regime-details-item">
+            <span>Surcharge (if applicable):</span>
+            <span id="res-old-surcharge">₹0</span>
+          </li>
+          <li class="regime-details-item">
+            <span>Health & Education Cess (4%):</span>
+            <span id="res-old-cess">₹0</span>
+          </li>
+          <li class="regime-details-item strong" style="font-size: 1.1rem;">
+            <span>Total Tax Payable:</span>
+            <span class="text-primary font-bold" id="res-old-total-bottom"></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Step-by-Step Slab Breakdown Tables -->
+    <div class="grid grid-cols-2" style="margin-bottom: 2rem;">
+      <!-- New Regime Slabs Breakdown -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">New Regime Slabs Breakdown</h3>
+        </div>
+        <div class="card-body" style="padding: 0;">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Income Slab</th>
+                  <th>Rate</th>
+                  <th class="text-right">Taxable in Slab</th>
+                  <th class="text-right">Slab Tax</th>
+                </tr>
+              </thead>
+              <tbody id="slabs-breakdown-new">
+                <!-- JS populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Old Regime Slabs Breakdown -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Old Regime Slabs Breakdown</h3>
+        </div>
+        <div class="card-body" style="padding: 0;">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Income Slab</th>
+                  <th>Rate</th>
+                  <th class="text-right">Taxable in Slab</th>
+                  <th class="text-right">Slab Tax</th>
+                </tr>
+              </thead>
+              <tbody id="slabs-breakdown-old">
+                <!-- JS populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+<script src="assets/js/calculator.js"></script>
+<?php require_once __DIR__ . '/includes/footer.php'; ?>

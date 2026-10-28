@@ -1,0 +1,170 @@
+<?php
+// deductions.php
+require_once __DIR__ . '/includes/auth_check.php';
+requireAuthPage();
+
+$pageTitle = "Deductions & Exemptions Management";
+$topbarTitle = "Deductions (Chapter VI-A)";
+$activePage = "deductions";
+
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/includes/sidebar.php';
+?>
+
+<div class="main-wrapper">
+  <?php require_once __DIR__ . '/includes/topbar.php'; ?>
+
+  <main class="content-body">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div>
+        <h2 class="page-title">Deductions & Statutory Exemptions</h2>
+        <p class="page-subtitle">Manage Section 80C, 80D, NPS, Home Loan Interest, and other Chapter VI-A deductions to reduce Old Regime tax.</p>
+      </div>
+      <div class="page-actions">
+        <button type="button" class="btn btn-primary btn-sm" onclick="openAddDeductionModal()">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+          + Add Deduction
+        </button>
+      </div>
+    </div>
+
+    <!-- Info Banner -->
+    <div class="disclaimer-banner" style="background: #f0fdf4; border-color: #bbf7d0; color: #166534;">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clip-rule="evenodd"/></svg>
+      <div>
+        <strong>Regime Applicability Note:</strong>
+        Chapter VI-A deductions (80C, 80D, 80CCD, etc.) reduce your taxable income under the <strong>Old Tax Regime</strong>. Under the <strong>New Tax Regime</strong>, individuals receive a flat Standard Deduction of ₹75,000 (FY 24-25) without requiring itemized investment proofs.
+      </div>
+    </div>
+
+    <!-- Statutory Section Limit Trackers -->
+    <div style="margin-bottom: 2rem;">
+      <h3 style="margin-bottom: 0.75rem; font-size: 1.15rem;">Statutory Investment Limits Tracker</h3>
+      <div class="grid grid-cols-4" id="statutory-caps-container">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+
+    <!-- Summary Box -->
+    <div class="card" style="margin-bottom: 1.5rem; background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%); color: white;">
+      <div class="card-body" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: #ccfbf1;">Total Deductions Claimed</span>
+          <div id="deduction-total-amount" style="font-size: 2.25rem; font-weight: 800; color: #ffffff; line-height: 1.2;">₹0</div>
+        </div>
+        <div style="text-align: right;">
+          <span class="badge" style="background: rgba(255, 255, 255, 0.2); color: white; font-size: 0.85rem; padding: 0.4rem 0.8rem;">
+            <span id="deduction-total-count">0</span> Items Claimed
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deductions Table Card -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Recorded Deductions</h3>
+        <span class="text-muted" style="font-size: 0.85rem;">Select an entry to edit or update amounts</span>
+      </div>
+      <div class="card-body" style="padding: 0;">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Section</th>
+                <th>Description / Specifics</th>
+                <th>F.Y.</th>
+                <th class="text-right">Claimed Amount</th>
+                <th class="text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="deduction-table-body">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Add / Edit Modal -->
+  <div class="modal-overlay" id="deduction-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="deduction-modal-title">Add Deduction Entry</h3>
+        <button type="button" class="modal-close" data-dismiss="modal">&times;</button>
+      </div>
+      <form id="deduction-form" onsubmit="handleDeductionFormSubmit(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="deduction-section">Income Tax Act Section <span class="required">*</span></label>
+            <select id="deduction-section" class="form-select" required>
+              <option value="80c">Section 80C - EPF, PPF, ELSS, Life Insurance, Tuition Fees (Max ₹1.5L)</option>
+              <option value="80d">Section 80D - Health Insurance Premium (Self, Family & Parents)</option>
+              <option value="80ccd_1b">Section 80CCD(1B) - NPS Additional Contribution (Max ₹50,000)</option>
+              <option value="sec_24b">Section 24(b) - Interest on Housing Loan (Max ₹2,00,000)</option>
+              <option value="80e">Section 80E - Interest on Higher Education Loan (No upper cap)</option>
+              <option value="80g">Section 80G - Donations to Eligible Charities / PM CARES</option>
+              <option value="80tta">Section 80TTA - Savings Account Interest (Max ₹10,000 for Non-Seniors)</option>
+              <option value="80ttb">Section 80TTB - Senior Citizen Interest Income (Max ₹50,000)</option>
+              <option value="other">Other Eligible Chapter VI-A Deductions</option>
+            </select>
+          </div>
+
+          <div id="section-help-box" style="background: var(--gray-100); padding: 0.65rem 0.85rem; border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--gray-700); margin-bottom: 1.25rem;">
+            Statutory cap: ₹1,50,000 across all 80C instruments.
+          </div>
+
+          <div class="grid grid-cols-2" style="gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label" for="deduction-amount">Amount (₹) <span class="required">*</span></label>
+              <div class="input-group">
+                <span class="input-prefix">₹</span>
+                <input type="number" id="deduction-amount" class="form-control" placeholder="0" min="1" step="500" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="deduction-fy">Financial Year <span class="required">*</span></label>
+              <select id="deduction-fy" class="form-select" required>
+                <option value="2024-2025">FY 2024-25 (AY 2025-26)</option>
+                <option value="2023-2024">FY 2023-24 (AY 2024-25)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="deduction-notes">Notes / Proof Details (Optional)</label>
+            <textarea id="deduction-notes" class="form-control" rows="2" placeholder="e.g. PPF Account at SBI, HDFC Ergo Health Policy No. 1234"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="deduction-save-btn">Save Deduction</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-overlay" id="deduction-delete-modal">
+    <div class="modal-dialog" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Delete Deduction Record</h3>
+        <button type="button" class="modal-close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="margin: 0; color: var(--gray-700);">
+          Are you sure you want to delete this deduction record? This may increase your estimated tax liability under the Old Regime.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" onclick="executeDeleteDeduction()">Delete Record</button>
+      </div>
+    </div>
+  </div>
+
+<script src="assets/js/deductions.js"></script>
+<?php require_once __DIR__ . '/includes/footer.php'; ?>

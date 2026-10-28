@@ -1,0 +1,175 @@
+/* ===================================================================
+   Income Tax Filing Assistant - Auth Stylesheet (Login / Register)
+   Pure CSS3
+   =================================================================== */
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.08) 0%, rgba(248, 250, 252, 1) 90%);
+  padding: 2rem 1rem;
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 1000px;
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.15);
+  border: 1px solid var(--gray-200);
+  display: flex;
+  overflow: hidden;
+  min-height: 600px;
+}
+
+.auth-sidebar {
+  width: 42%;
+  background: linear-gradient(145deg, #0f172a 0%, #1e3a8a 100%);
+  color: var(--white);
+  padding: 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-sidebar::after {
+  content: "";
+  position: absolute;
+  top: -20%;
+  right: -20%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.2) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.auth-sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #ffffff;
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.auth-sidebar-features {
+  list-style: none;
+  margin: 2.5rem 0;
+}
+
+.auth-sidebar-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.95rem;
+  color: #cbd5e1;
+}
+
+.auth-sidebar-features li svg {
+  width: 20px;
+  height: 20px;
+  color: #38bdf8;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.auth-sidebar-quote {
+  border-left: 3px solid #38bdf8;
+  padding-left: 1rem;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.auth-main {
+  width: 58%;
+  padding: 3rem 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+.auth-title {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--gray-900);
+  margin-bottom: 0.35rem;
+}
+
+.auth-subtitle {
+  color: var(--gray-500);
+  font-size: 0.95rem;
+  margin-bottom: 1.75rem;
+}
+
+.auth-demo-box {
+  background: var(--primary-light);
+  border: 1px dashed var(--primary-border);
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.auth-demo-text {
+  font-size: 0.85rem;
+  color: var(--primary);
+  line-height: 1.4;
+}
+
+.auth-demo-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition);
+}
+
+.auth-demo-btn:hover {
+  background: var(--primary-hover);
+}
+
+.auth-footer {
+  margin-top: 1.75rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--gray-600);
+}
+
+.auth-footer a {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+@media (max-width: 850px) {
+  .auth-container {
+    flex-direction: column;
+    max-width: 520px;
+  }
+  
+  .auth-sidebar {
+    width: 100%;
+    padding: 2rem;
+  }
+  
+  .auth-main {
+    width: 100%;
+    padding: 2rem;
+  }
+}

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account - Income Tax Filing Assistant</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/auth.css">
+</head>
+<body class="auth-page">
+
+  <div class="auth-container" style="max-width: 1080px;">
+    <!-- Left Sidebar -->
+    <div class="auth-sidebar">
+      <div>
+        <a href="index.php" class="auth-sidebar-brand">
+          <div class="brand-icon" style="width: 36px; height: 36px;">
+            <svg viewBox="0 0 24 24"><path d="M21 7.28V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-2.28c.59-.35 1-.98 1-1.72V9c0-.74-.41-1.37-1-1.72zM20 9v6h-7V9h7zM5 19V5h14v2h-6c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h6v2H5z"/></svg>
+          </div>
+          TaxAssist India
+        </a>
+
+        <div style="margin-top: 2rem;">
+          <h3 style="color: white; margin-bottom: 0.5rem;">Start Your Tax Planning</h3>
+          <p style="color: #94a3b8; font-size: 0.9rem;">Join thousands of taxpayers optimizing their liability under Union Budget rules.</p>
+        </div>
+
+        <ul class="auth-sidebar-features" style="margin: 2rem 0;">
+          <li>
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
+            <span>Automated Age-Based Slab Classification (Senior/Super Senior)</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
+            <span>Categorized Income: Salary, House Property, Capital Gains & Business</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
+            <span>Chapter VI-A Statutory Limit Warnings & Max Deductions</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
+            <span>100% Private - Runs on your local XAMPP environment</span>
+          </li>
+        </ul>
+      </div>
+
+      <div style="font-size: 0.75rem; color: #64748b;">
+        College Capstone Project &bull; TaxAssist Engine v1.0
+      </div>
+    </div>
+
+    <!-- Right Register Form -->
+    <div class="auth-main" style="padding: 2.5rem 3rem;">
+      <h2 class="auth-title">Create your taxpayer account</h2>
+      <p class="auth-subtitle">Fill in your information to initialize your tax calculation profile</p>
+
+      <!-- Alert Box -->
+      <div id="register-alert" style="display: none; margin-bottom: 1.25rem; padding: 0.75rem 1rem; border-radius: var(--radius-md); font-size: 0.875rem;"></div>
+
+      <form id="register-form" onsubmit="handleRegisterSubmit(event)">
+        <div class="grid grid-cols-2" style="gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="reg-name">Full Name <span class="required">*</span></label>
+            <input type="text" id="reg-name" class="form-control" placeholder="e.g. Ramesh Kumar" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-email">Email Address <span class="required">*</span></label>
+            <input type="email" id="reg-email" class="form-control" placeholder="ramesh@example.com" required>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2" style="gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="reg-pan">PAN Card Number <span class="required">*</span></label>
+            <input type="text" id="reg-pan" class="form-control" placeholder="ABCDE1234F" maxlength="10" style="text-transform: uppercase;" required>
+            <span class="form-text">Format: 5 letters, 4 digits, 1 letter</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-dob">Date of Birth <span class="required">*</span></label>
+            <input type="date" id="reg-dob" class="form-control" required>
+            <span class="form-text">Used to determine Senior Citizen slab eligibility</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2" style="gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="reg-phone">Mobile Phone</label>
+            <input type="tel" id="reg-phone" class="form-control" placeholder="9876543210" maxlength="10">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-fy">Default Financial Year</label>
+            <select id="reg-fy" class="form-select">
+              <option value="2024-2025" selected>FY 2024-25 (AY 2025-26)</option>
+              <option value="2023-2024">FY 2023-24 (AY 2024-25)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2" style="gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="reg-password">Password <span class="required">*</span></label>
+            <input type="password" id="reg-password" class="form-control" placeholder="Min. 8 characters" required minlength="8">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-confirm-password">Confirm Password <span class="required">*</span></label>
+            <input type="password" id="reg-confirm-password" class="form-control" placeholder="Re-enter password" required minlength="8">
+          </div>
+        </div>
+
+        <div class="form-group" style="display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 1.5rem;">
+          <input type="checkbox" id="reg-terms" required style="margin-top: 4px;">
+          <label for="reg-terms" style="font-size: 0.825rem; color: var(--gray-600); cursor: pointer;">
+            I acknowledge that this system is an educational income tax estimation tool for college demonstration, not an official government submission portal.
+          </label>
+        </div>
+
+        <button type="submit" id="reg-btn" class="btn btn-primary btn-block btn-lg">
+          <span id="reg-btn-text">Create Account & Enter Dashboard</span>
+          <span id="reg-btn-spinner" class="spinner" style="display: none;"></span>
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        Already registered? <a href="login.php">Sign In here</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+  <script src="assets/js/api.js"></script>
+  <script>
+    async function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('reg-name').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const pan = document.getElementById('reg-pan').value.trim().toUpperCase();
+      const dob = document.getElementById('reg-dob').value;
+      const phone = document.getElementById('reg-phone').value.trim();
+      const default_fy = document.getElementById('reg-fy').value;
+      const password = document.getElementById('reg-password').value;
+      const confirmPassword = document.getElementById('reg-confirm-password').value;
+
+      const btn = document.getElementById('reg-btn');
+      const btnText = document.getElementById('reg-btn-text');
+      const btnSpinner = document.getElementById('reg-btn-spinner');
+
+      // PAN Card Validation: 5 letters, 4 digits, 1 letter
+      const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+      if (!panRegex.test(pan)) {
+        showAlert('Invalid PAN Card format. It must follow 5 uppercase letters, 4 digits, and 1 letter (e.g. ABCDE1234F).', 'danger');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showAlert('Passwords do not match. Please re-enter identical passwords.', 'danger');
+        return;
+      }
+
+      if (password.length < 8) {
+        showAlert('Password must be at least 8 characters long.', 'danger');
+        return;
+      }
+
+      // UI Loading state
+      btn.disabled = true;
+      btnText.style.display = 'none';
+      btnSpinner.style.display = 'inline-block';
+
+      try {
+        const res = await apiRequest('auth.php?action=register', {
+          method: 'POST',
+          body: {
+            name,
+            email,
+            pan_number: pan,
+            dob,
+            phone,
+            default_fy,
+            password
+          }
+        });
+
+        showAlert('Account created successfully! Redirecting...', 'success');
+        showToast('Registration complete. Welcome!', 'success');
+        setTimeout(() => {
+          window.location.href = 'dashboard.php';
+        }, 800);
+      } catch (err) {
+        showAlert(err.message || 'Registration failed. Please check your details.', 'danger');
+        showToast(err.message || 'Registration error', 'danger');
+      } finally {
+        btn.disabled = false;
+        btnText.style.display = 'inline-block';
+        btnSpinner.style.display = 'none';
+      }
+    }
+
+    function showAlert(msg, type) {
+      const alertBox = document.getElementById('register-alert');
+      alertBox.textContent = msg;
+      alertBox.style.display = 'block';
+      if (type === 'danger') {
+        alertBox.style.backgroundColor = 'var(--danger-bg)';
+        alertBox.style.color = 'var(--danger)';
+        alertBox.style.border = '1px solid var(--danger-border)';
+      } else {
+        alertBox.style.backgroundColor = 'var(--success-bg)';
+        alertBox.style.color = 'var(--success)';
+        alertBox.style.border = '1px solid var(--success-border)';
+      }
+    }
+  </script>
+</body>
+</html>

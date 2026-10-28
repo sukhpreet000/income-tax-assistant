@@ -1,0 +1,135 @@
+<?php
+// profile.php
+require_once __DIR__ . '/includes/auth_check.php';
+requireAuthPage();
+
+$pageTitle = "My Profile & Tax Preferences";
+$topbarTitle = "User Profile & Security";
+$activePage = "profile";
+
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/includes/sidebar.php';
+?>
+
+<div class="main-wrapper">
+  <?php require_once __DIR__ . '/includes/topbar.php'; ?>
+
+  <main class="content-body">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div>
+        <h2 class="page-title">Taxpayer Profile & Settings</h2>
+        <p class="page-subtitle">Update your personal details, statutory PAN information, and tax calculation preferences.</p>
+      </div>
+      <div class="page-actions">
+        <button type="button" class="btn btn-danger btn-sm" onclick="handleLogout()">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+          Sign Out
+        </button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2" style="gap: 2rem; margin-bottom: 2rem;">
+      <!-- Profile Information Card -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">Taxpayer Information</h3>
+            <p class="card-subtitle">Permanent credentials used for tax bracket assessment</p>
+          </div>
+          <span id="prof-age-badge" class="badge badge-primary">Standard</span>
+        </div>
+        <div class="card-body">
+          <form id="profile-form" onsubmit="handleProfileUpdate(event)">
+            <div class="form-group">
+              <label class="form-label" for="prof-name">Full Name <span class="required">*</span></label>
+              <input type="text" id="prof-name" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="prof-email">Email Address</label>
+              <input type="email" id="prof-email" class="form-control" disabled style="background: var(--gray-100); cursor: not-allowed;">
+              <span class="form-text">Primary login identifier (cannot be changed)</span>
+            </div>
+
+            <div class="grid grid-cols-2" style="gap: 1rem;">
+              <div class="form-group">
+                <label class="form-label" for="prof-pan">PAN Card Number <span class="required">*</span></label>
+                <input type="text" id="prof-pan" class="form-control" maxlength="10" style="text-transform: uppercase;" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="prof-dob">Date of Birth <span class="required">*</span></label>
+                <input type="date" id="prof-dob" class="form-control" required>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2" style="gap: 1rem;">
+              <div class="form-group">
+                <label class="form-label" for="prof-phone">Mobile Phone</label>
+                <input type="tel" id="prof-phone" class="form-control" maxlength="10">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="prof-fy">Default Financial Year</label>
+                <select id="prof-fy" class="form-select">
+                  <option value="2024-2025">FY 2024-25 (AY 2025-26)</option>
+                  <option value="2023-2024">FY 2023-24 (AY 2024-25)</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" id="prof-save-btn" class="btn btn-primary" style="margin-top: 0.5rem;">
+              Save Profile Changes
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Security / Change Password Card -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">Security & Password</h3>
+            <p class="card-subtitle">Manage your account authentication credentials</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <form id="password-form" onsubmit="handlePasswordChange(event)">
+            <div class="form-group">
+              <label class="form-label" for="prof-current-pass">Current Password <span class="required">*</span></label>
+              <input type="password" id="prof-current-pass" class="form-control" placeholder="••••••••" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="prof-new-pass">New Password <span class="required">*</span></label>
+              <input type="password" id="prof-new-pass" class="form-control" placeholder="Min. 8 characters" required minlength="8">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="prof-confirm-pass">Confirm New Password <span class="required">*</span></label>
+              <input type="password" id="prof-confirm-pass" class="form-control" placeholder="Re-enter new password" required minlength="8">
+            </div>
+
+            <button type="submit" id="prof-pass-btn" class="btn btn-secondary" style="margin-top: 0.5rem;">
+              Update Password
+            </button>
+          </form>
+
+          <!-- Danger Zone -->
+          <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--gray-200);">
+            <h4 style="color: var(--danger); font-size: 1rem; margin-bottom: 0.25rem;">Danger Zone</h4>
+            <p style="font-size: 0.85rem; color: var(--gray-500); margin-bottom: 1rem;">
+              Clear all your income records, deductions, and document checklist items to start afresh.
+            </p>
+            <button type="button" class="btn btn-danger btn-sm" onclick="handleResetRecords()">
+              Reset All My Financial Data
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+<script src="assets/js/profile.js"></script>
+<?php require_once __DIR__ . '/includes/footer.php'; ?>

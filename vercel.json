@@ -1,0 +1,60 @@
+{
+  "functions": {
+    "api/**/*.php": {
+      "runtime": "vercel-php@0.7.2"
+    },
+    "*.php": {
+      "runtime": "vercel-php@0.7.2"
+    }
+  },
+  "routes": [
+    {
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/login",
+      "dest": "/login.php"
+    },
+    {
+      "src": "/register",
+      "dest": "/register.php"
+    },
+    {
+      "src": "/dashboard",
+      "dest": "/dashboard.php"
+    },
+    {
+      "src": "/income",
+      "dest": "/income.php"
+    },
+    {
+      "src": "/deductions",
+      "dest": "/deductions.php"
+    },
+    {
+      "src": "/calculator",
+      "dest": "/calculator.php"
+    },
+    {
+      "src": "/checklist",
+      "dest": "/checklist.php"
+    },
+    {
+      "src": "/history",
+      "dest": "/history.php"
+    },
+    {
+      "src": "/profile",
+      "dest": "/profile.php"
+    },
+    {
+      "src": "/",
+      "dest": "/index.php"
+    }
+  ]
+}
