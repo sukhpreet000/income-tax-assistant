@@ -1,60 +1,31 @@
 {
+  "version": 2,
+  "cleanUrls": true,
   "functions": {
-    "api/**/*.php": {
-      "runtime": "vercel-php@0.7.2"
-    },
-    "*.php": {
-      "runtime": "vercel-php@0.7.2"
+    "api/*.php": {
+      "runtime": "vercel-php@0.9.0"
     }
   },
-  "routes": [
-    {
-      "src": "/assets/(.*)",
-      "dest": "/assets/$1"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/login",
-      "dest": "/login.php"
-    },
-    {
-      "src": "/register",
-      "dest": "/register.php"
-    },
-    {
-      "src": "/dashboard",
-      "dest": "/dashboard.php"
-    },
-    {
-      "src": "/income",
-      "dest": "/income.php"
-    },
-    {
-      "src": "/deductions",
-      "dest": "/deductions.php"
-    },
-    {
-      "src": "/calculator",
-      "dest": "/calculator.php"
-    },
-    {
-      "src": "/checklist",
-      "dest": "/checklist.php"
-    },
-    {
-      "src": "/history",
-      "dest": "/history.php"
-    },
-    {
-      "src": "/profile",
-      "dest": "/profile.php"
-    },
-    {
-      "src": "/",
-      "dest": "/index.php"
-    }
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/login.php", "destination": "/login.html" },
+    { "source": "/register.php", "destination": "/register.html" },
+    { "source": "/dashboard.php", "destination": "/dashboard.html" },
+    { "source": "/income.php", "destination": "/income.html" },
+    { "source": "/deductions.php", "destination": "/deductions.html" },
+    { "source": "/calculator.php", "destination": "/calculator.html" },
+    { "source": "/checklist.php", "destination": "/checklist.html" },
+    { "source": "/history.php", "destination": "/history.html" },
+    { "source": "/profile.php", "destination": "/profile.html" },
+    { "source": "/index.php", "destination": "/index.html" },
+    { "source": "/login", "destination": "/login.html" },
+    { "source": "/register", "destination": "/register.html" },
+    { "source": "/dashboard", "destination": "/dashboard.html" },
+    { "source": "/income", "destination": "/income.html" },
+    { "source": "/deductions", "destination": "/deductions.html" },
+    { "source": "/calculator", "destination": "/calculator.html" },
+    { "source": "/checklist", "destination": "/checklist.html" },
+    { "source": "/history", "destination": "/history.html" },
+    { "source": "/profile", "destination": "/profile.html" }
   ]
 }

@@ -135,7 +135,7 @@ async function handleResetRecords() {
     });
     showToast('Your financial records have been reset.', 'info');
     setTimeout(() => {
-      window.location.href = 'dashboard.php';
+      window.location.href = typeof getPageUrl === 'function' ? getPageUrl('dashboard') : 'dashboard.html';
     }, 1000);
   } catch (err) {
     showToast(err.message || 'Failed to reset records', 'danger');

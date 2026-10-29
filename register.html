@@ -13,7 +13,7 @@
     <!-- Left Sidebar -->
     <div class="auth-sidebar">
       <div>
-        <a href="index.php" class="auth-sidebar-brand">
+        <a href="index.html" class="auth-sidebar-brand">
           <div class="brand-icon" style="width: 36px; height: 36px;">
             <svg viewBox="0 0 24 24"><path d="M21 7.28V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-2.28c.59-.35 1-.98 1-1.72V9c0-.74-.41-1.37-1-1.72zM20 9v6h-7V9h7zM5 19V5h14v2h-6c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h6v2H5z"/></svg>
           </div>
@@ -126,7 +126,7 @@
       </form>
 
       <div class="auth-footer">
-        Already registered? <a href="login.php">Sign In here</a>
+        Already registered? <a href="login.html">Sign In here</a>
       </div>
     </div>
   </div>
@@ -188,7 +188,7 @@
         showAlert('Account created successfully! Redirecting...', 'success');
         showToast('Registration complete. Welcome!', 'success');
         setTimeout(() => {
-          window.location.href = 'dashboard.php';
+          window.location.href = typeof getPageUrl === 'function' ? getPageUrl('dashboard') : 'dashboard.html';
         }, 800);
       } catch (err) {
         showAlert(err.message || 'Registration failed. Please check your details.', 'danger');

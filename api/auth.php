@@ -2,7 +2,10 @@
 // api/auth.php
 header('Content-Type: application/json; charset=utf-8');
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+    if (!empty($_ENV['VERCEL']) || getenv('VERCEL') || !empty($_SERVER['VERCEL']) || !is_writable(session_save_path())) {
+        @session_save_path(sys_get_temp_dir());
+    }
+    @session_start();
 }
 
 require_once __DIR__ . '/../config/database.php';

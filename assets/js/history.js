@@ -35,7 +35,7 @@ async function loadHistoryList() {
               </div>
               <div class="empty-state-title">No Calculation History Saved</div>
               <p class="empty-state-text">You haven't saved any tax calculations yet. Use the Tax Calculator and click "Save to History" to record snapshots.</p>
-              <a href="calculator.php" class="btn btn-primary btn-sm">Go to Tax Calculator</a>
+              <a href="${typeof getPageUrl === 'function' ? getPageUrl('calculator') : 'calculator.html'}" class="btn btn-primary btn-sm">Go to Tax Calculator</a>
             </div>
           </td>
         </tr>

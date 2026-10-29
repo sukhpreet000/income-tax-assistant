@@ -294,17 +294,45 @@ http://127.0.0.1:8000/
 
 ---
 
-## 9. Online Deployment Considerations
+## 9. GitHub & Vercel Deployment Guide
+
+### Deploying to Vercel via GitHub (One-Click Setup)
+1. **Push to GitHub**:
+   ```bash
+   git add .
+   git commit -m "Configure project structure for Vercel deployment"
+   git push origin main
+   ```
+2. **Import into Vercel**:
+   - Go to [vercel.com](https://vercel.com) and log in.
+   - Click **Add New** > **Project**.
+   - Select your GitHub repository (`income-tax-assistant`).
+   - Framework Preset: Select **Other** (Build Command & Output Directory: leave blank default).
+   - Click **Deploy**.
+
+3. **Zero-Config Instant Demo Mode**:
+   - The application is equipped with a resilient Hybrid Client-Server Data Layer.
+   - Immediately upon deployment, the live Vercel URL works out-of-the-box:
+     - You can test login with demo credentials (`demo@taxassistant.local` / `Demo@1234`).
+     - Interactive tax comparison, Old vs New regime calculations, income tracker, deduction management, and checklist progress work directly in the browser.
+
+4. **Connecting Cloud MySQL (Optional for Permanent Server Storage)**:
+   - If you want server-side database storage on Vercel, create a free MySQL database on **TiDB Cloud**, **Aiven**, **Clever Cloud**, or **Railway**.
+   - Import `database.sql` into your cloud database.
+   - Go to Vercel Project **Settings** > **Environment Variables** and add:
+     - `DB_HOST`: Your cloud database host
+     - `DB_PORT`: `3306`
+     - `DB_NAME`: `tax_assistant`
+     - `DB_USER`: Your cloud database user
+     - `DB_PASS`: Your cloud database password
+     - `DB_SSL`: `1` (for cloud SSL connections)
+   - Redeploy or trigger a new commit; `config/database.php` will automatically connect to your cloud database!
 
 ### Standard PHP Hosting (cPanel, Hostinger, Shared Hosting)
 1. Upload all files to your server's `public_html` directory.
 2. Create a MySQL database and user in your hosting control panel.
 3. Import `database.sql` via phpMyAdmin.
 4. Update `DB_NAME`, `DB_USER`, and `DB_PASS` in `config/database.php`.
-
-### Vercel Serverless Deployment
-- The repository includes a `vercel.json` file configured with the `@vercel/php` serverless runtime.
-- For database connectivity on Vercel, connect `config/database.php` to a cloud MySQL database such as PlanetScale, Supabase (with MySQL wrapper), Aiven, or AWS RDS by configuring environment variables.
 
 ---
 
@@ -381,6 +409,5 @@ income-tax-assistant/
 
 ---
 **Project Status:** Functional, tested, and ready for college project demonstration in XAMPP.
-#   i n c o m e - t a x - a s s i s t a n t  
- #   i n c o m e - t a x - a s s i s t a n t  
- 
+# income-tax-assistant
+# income-tax-assistant

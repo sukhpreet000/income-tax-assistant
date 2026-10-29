@@ -1,7 +1,10 @@
 <?php
 // includes/header.php
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+    if (!empty($_ENV['VERCEL']) || getenv('VERCEL') || !empty($_SERVER['VERCEL']) || !is_writable(session_save_path())) {
+        @session_save_path(sys_get_temp_dir());
+    }
+    @session_start();
 }
 $pageTitle = isset($pageTitle) ? $pageTitle . " - Income Tax Filing Assistant" : "Income Tax Filing Assistant";
 ?>

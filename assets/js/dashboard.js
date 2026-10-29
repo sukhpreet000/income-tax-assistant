@@ -149,7 +149,7 @@ function renderIncomeBreakdown(incomeList, totalGross) {
         </div>
         <div class="empty-state-title" style="font-size: 1rem;">No Income Entries Yet</div>
         <p class="empty-state-text" style="font-size: 0.85rem; margin-bottom: 1rem;">Add your salary, rental income, or interest to view your breakdown.</p>
-        <a href="income.php" class="btn btn-primary btn-sm">+ Add First Income Source</a>
+        <a href="${typeof getPageUrl === 'function' ? getPageUrl('income') : 'income.html'}" class="btn btn-primary btn-sm">+ Add First Income Source</a>
       </div>
     `;
     return;
