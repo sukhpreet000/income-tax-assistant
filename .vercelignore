@@ -1,0 +1,7 @@
+# Exclude root PHP files from Vercel deployment to prevent duplicate route conflicts with HTML files
+/*.php
+
+# Development & Database backups
+*.sql
+.env*
+*.log
