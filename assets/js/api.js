@@ -24,6 +24,14 @@ function formatNumber(amount) {
   return new Intl.NumberFormat('en-IN').format(num);
 }
 
+// HTML entity escaper to prevent XSS and rendering errors across all pages
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str).replace(/[&<>"']/g, function(m) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+  });
+}
+
 // Dynamic page URL helper (handles both .html and .php depending on environment)
 function getPageUrl(pageName) {
   if (window.location.pathname.endsWith('.php')) {
